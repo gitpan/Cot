@@ -1,0 +1,11 @@
+/.build/
+/_build/
+/carton.lock
+/.carton/
+/local/
+/nytprof.out
+/nytprof/
+/Build
+MYMETA*
+blib
+Cot-*

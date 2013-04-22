@@ -1,0 +1,50 @@
+---
+abstract: 'super lightweight perl framework based on Plack'
+author:
+  - 'This module has been written by Yusuke Shibata <shibata@yusukeshibata.jp> and others,'
+build_requires:
+  Test::More: 0.98
+configure_requires:
+  CPAN::Meta: 0
+  CPAN::Meta::Prereqs: 0
+  Module::Build: 0.38
+dynamic_config: 0
+generated_by: 'Minilla/v0.0.53, CPAN::Meta::Converter version 2.130880'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Cot
+no_index:
+  directory:
+    - t
+    - xt
+    - inc
+    - share
+    - eg
+    - examples
+provides:
+  Cot:
+    file: lib/Cot.pm
+    version: 0.01
+  Cot::Config:
+    file: lib/Cot/Config.pm
+    version: 0.01
+  Cot::Plugin:
+    file: lib/Cot/Plugin.pm
+    version: 0.01
+  Cot::Plugin::Config:
+    file: lib/Cot/Plugin/Config.pm
+    version: 0.01
+requires:
+  Plack: 0
+  Pod::Usage: 0
+  Text::MicroTemplate: 0
+  YAML: 0
+  parent: 0
+  perl: 5.008005
+resources:
+  bugtracker: https://github.com/yusukeshibata/Cot/issues
+  homepage: https://github.com/yusukeshibata/Cot
+  repository: git://github.com/yusukeshibata/Cot.git
+version: 0.01
