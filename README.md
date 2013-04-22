@@ -126,7 +126,7 @@ __path\_info__ is PATH\_INFO Array ref object.
         ...
     };
 
-### env
+## env
 
 __env__ is Plack environment variable.
 
@@ -138,7 +138,7 @@ __env__ is Plack environment variable.
         ...
     };
 
-#### uri
+## uri
 
 __uri__ is requested URI string
 
@@ -189,7 +189,8 @@ config file($ENV{COT\_ROOT}/config.yaml):
 application code:
 
     use Cot;
-    use Cot::Plugin::Config;
+    use Cot::Plugin qw/Config/;
+    # or use Cot::Plugin::Config;
 
     get "/" => sub {
        my $self = shift;
@@ -210,7 +211,7 @@ submit pull requests!
 
 # DEPENDENCIES
 
-The following modules are mandatory (Dancer cannot run without them):
+The following modules are mandatory (Cot cannot run without them):
 
 - [YAML](http://search.cpan.org/perldoc?YAML)
 - [Plack](http://search.cpan.org/perldoc?Plack)

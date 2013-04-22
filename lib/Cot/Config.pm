@@ -3,7 +3,7 @@ package Cot::Config;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.01";
+our $VERSION = "0.02";
 $VERSION = eval $VERSION;
 use YAML ();
 use File::Spec;
@@ -42,15 +42,23 @@ __END__
 
 =head1 NAME
 
-Cot - It's new $module
+Cot::Config is a Helper module for configuration.
 
 =head1 SYNOPSIS
 
-    use Cot;
+    use Cot::Config;
+
+    my $config = Cot::Config->config;
+    my $world = $config->{hello};
+
+B<$ENV{COT_ROOT}/config.yaml> file is...
+
+    development:
+      hello: world
 
 =head1 DESCRIPTION
 
-Cot is ...
+Cot::Config is a Helper module for configuration.
 
 =head1 LICENSE
 

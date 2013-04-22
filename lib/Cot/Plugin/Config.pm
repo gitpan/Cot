@@ -3,7 +3,7 @@ package Cot::Plugin::Config;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.01";
+our $VERSION = "0.02";
 $VERSION = eval $VERSION;
 use parent qw(Cot::Plugin);
 use Cot::Config;
@@ -27,7 +27,7 @@ Cot::Plugin::Config - Cot configuration plugin
 For example,
 
     use Cot;
-    use Cot::Plugin::Config;
+    use Cot::Plugin qw/Config/;
 
     get "/test" => sub {
         my $self = shift;

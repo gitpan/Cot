@@ -3,17 +3,30 @@ package Cot::Plugin;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.01";
+our $VERSION = "0.02";
 $VERSION = eval $VERSION;
 use Carp;
 
 sub import {
     my $class = shift;
     my $pkg   = caller(0);
-    croak "$pkg is not Cot object[$class importing...]" unless $pkg->isa('Cot');
-    $pkg->_register_plugin($class);
+    if ( $class eq 'Cot::Plugin' ) {
+        foreach (@_) {
+            my $klass = "Cot::Plugin::$_";
+            eval "require $klass" or croak "Plugin[$_] is not installed.";
+            $klass->_regist($pkg);
+        }
+        return;
+    }
+    $class->_regist($pkg);
 }
 
+sub _regist {
+    my ( $class, $pkg ) = @_;
+    croak "$pkg is not Cot object[$class importing...]"
+      unless $pkg->isa('Cot');
+    $pkg->_register_plugin($class);
+}
 sub new { bless {}, shift; }
 
 sub init {
@@ -62,7 +75,8 @@ For example, Text::Xslate plugin is below(It's only a example!).
 You can use in a Cot application.
 
     use Cot;
-    use Cot::Plugin::TX;
+    use Cot::Plugin qw/TX/;
+    # or use Cot::Plugin::TX;
 
     get '/' => sub {
         my $self = shift;
@@ -71,7 +85,7 @@ You can use in a Cot application.
 
         # you can call "tx" plugin
         my $out = $self->tx->output('/path/to/template', { hello => 'world' });
-        $self->res->bodyt($out);
+        $self->res->body($out);
     };
 
 =head1 DESCRIPTION

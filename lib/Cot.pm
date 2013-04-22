@@ -3,7 +3,7 @@ package Cot;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.01";
+our $VERSION = "0.02";
 $VERSION = eval $VERSION;
 use File::Spec;
 use Plack::Request;
@@ -331,7 +331,7 @@ B<path_info> is PATH_INFO Array ref object.
         ...
     };
 
-=head3 env
+=head2 env
 
 B<env> is Plack environment variable.
 
@@ -343,7 +343,7 @@ B<env> is Plack environment variable.
         ...
     };
 
-=head4 uri
+=head2 uri
 
 B<uri> is requested URI string
 
@@ -394,7 +394,8 @@ config file($ENV{COT_ROOT}/config.yaml):
 application code:
 
     use Cot;
-    use Cot::Plugin::Config;
+    use Cot::Plugin qw/Config/;
+    # or use Cot::Plugin::Config;
 
     get "/" => sub {
        my $self = shift;
@@ -415,7 +416,7 @@ submit pull requests!
 
 =head1 DEPENDENCIES
 
-The following modules are mandatory (Dancer cannot run without them):
+The following modules are mandatory (Cot cannot run without them):
 
 =over 8
 
