@@ -58,6 +58,50 @@ Receive POST request:
         #code
     };
 
+## put
+
+Receive PUT request:
+
+    use Cot;
+
+    put '/api/echo' => sub {
+        my $self = shift;
+        #code
+    };
+
+## delete
+
+Receive DELETE request:
+
+    use Cot;
+
+    delete '/api/echo' => sub {
+        my $self = shift;
+        #code
+    };
+
+## options
+
+Receive OPTIONS request:
+
+    use Cot;
+
+    options '/api/echo' => sub {
+        my $self = shift;
+        #code
+    };
+
+## patch
+
+Receive PATCH request:
+
+    use Cot;
+
+    patch '/api/echo' => sub {
+        my $self = shift;
+        #code
+    };
+
 ## any
 
 Receive any HTTP request:

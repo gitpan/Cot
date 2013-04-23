@@ -1,5 +1,10 @@
 Revision history for Perl extension Cot
 
+0.04 2013-04-23T06:18:24Z
+
+   - cot script generate 'up' refined.
+   - PUT,DELETE,PATCH,OPTIONS method accept.
+
 0.03 2013-04-23T02:03:30Z
 
    - cot script updated.

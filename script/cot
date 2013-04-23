@@ -119,7 +119,7 @@ mode: 0775
 # export COT_ROOT=.
 export COT_ENV=development
 
-plackup -E $COT_ENV -I ./lib ./app.psgi
+cot run -E $COT_ENV
 ---
 path: <?= $_[0] ?>/app.psgi
 --- |+

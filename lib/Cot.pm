@@ -3,7 +3,7 @@ package Cot;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.03";
+our $VERSION = "0.04";
 $VERSION = eval $VERSION;
 use File::Spec;
 use Plack::Request;
@@ -21,7 +21,7 @@ sub import {
         no strict 'refs';
         push @{"$pkg\::ISA"}, $class;
     }
-    for my $func (qw/run get post any static/) {
+    for my $func (qw/run get post put patch delete options any static/) {
         no strict 'refs';
         *{"$pkg\::$func"} = \&$func;
     }
@@ -44,39 +44,69 @@ sub _app {
 sub new {
     my $class = shift;
     my $self  = bless {
-        controller => { get => {}, post => {}, },
+        controller => {},
         plugins    => [],
     }, $class;
     $POOL{ $class->_root } = $self;
 }
 
 # get '/' => sub { my $c = shift; }
+sub _method {
+    my ( $class, $path, $sub, @methods ) = @_;
+    foreach (@methods) {
+        $class->_app->{controller}->{$_} ||= {};
+        $class->_app->{controller}->{$_}->{$path} = $sub;
+    }
+}
+
 sub get {
     my ( $path, $sub ) = @_;
-    my $class      = caller(0);
-    my $controller = $class->_app->{controller};
-    $controller->{get}->{$path} = $sub;
+    my $class = caller(0);
+    $class->_method( $path, $sub, 'get' );
 }
 
 sub post {
     my ( $path, $sub ) = @_;
-    my $class      = caller(0);
-    my $controller = $class->_app->{controller};
-    $controller->{post}->{$path} = $sub;
+    my $class = caller(0);
+    $class->_method( $path, $sub, 'post' );
+}
+
+sub put {
+    my ( $path, $sub ) = @_;
+    my $class = caller(0);
+    $class->_method( $path, $sub, 'put' );
+}
+
+sub delete {
+    my ( $path, $sub ) = @_;
+    my $class = caller(0);
+    $class->_method( $path, $sub, 'delete' );
+}
+
+sub patch {
+    my ( $path, $sub ) = @_;
+    my $class = caller(0);
+    $class->_method( $path, $sub, 'patch' );
+}
+
+sub options {
+    my ( $path, $sub ) = @_;
+    my $class = caller(0);
+    $class->_method( $path, $sub, 'options' );
 }
 
 sub any {
     my ( $path, $sub ) = @_;
-    my $class      = caller(0);
-    my $controller = $class->_app->{controller};
-    $controller->{get}->{$path}  = $sub;
-    $controller->{post}->{$path} = $sub;
+    my $class = caller(0);
+    $class->_method( $path, $sub, 'get', 'post', 'put', 'patch', 'options',
+        'delete' );
 }
 
 sub static {
     my ($path)     = @_;
     my $class      = caller(0);
     my $controller = $class->_app->{controller};
+    $controller->{get} ||= {};
     $controller->{get}->{$path} = \&_static;
 }
 
@@ -259,6 +289,50 @@ Receive POST request:
     use Cot;
 
     post '/api/echo' => sub {
+        my $self = shift;
+        #code
+    };
+
+=head2 put
+
+Receive PUT request:
+
+    use Cot;
+
+    put '/api/echo' => sub {
+        my $self = shift;
+        #code
+    };
+
+=head2 delete
+
+Receive DELETE request:
+
+    use Cot;
+
+    delete '/api/echo' => sub {
+        my $self = shift;
+        #code
+    };
+
+=head2 options
+
+Receive OPTIONS request:
+
+    use Cot;
+
+    options '/api/echo' => sub {
+        my $self = shift;
+        #code
+    };
+
+=head2 patch
+
+Receive PATCH request:
+
+    use Cot;
+
+    patch '/api/echo' => sub {
         my $self = shift;
         #code
     };
