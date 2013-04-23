@@ -3,7 +3,7 @@ package Cot::Plugin;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.02";
+our $VERSION = "0.03";
 $VERSION = eval $VERSION;
 use Carp;
 

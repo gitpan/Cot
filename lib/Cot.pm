@@ -3,7 +3,7 @@ package Cot;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.02";
+our $VERSION = "0.03";
 $VERSION = eval $VERSION;
 use File::Spec;
 use Plack::Request;
@@ -237,7 +237,7 @@ You can initialize application skelton using cotto utility executable.
 
     % cot init Test
     % cd ./Test
-    % cot run -I./lib
+    % cot run
 
 =head1 METHODS
 
@@ -285,7 +285,7 @@ Serve static files:
 =head2 run
 
 Up the Plack execution loop.
-You can set L<placup> arguments.
+You can set L<plackup> arguments.
 
     use Cot;
 
@@ -372,7 +372,7 @@ Default value is B<developement>. You can change COT_ENV for configration.
 
     #!/bin/sh
     export COT_ENV=production
-    cot run -Ilib
+    cot run
 
 =head2 COT_DIRECTORYINDEX
 
@@ -380,7 +380,7 @@ Default value is none. If you use B<static> method, automatically serve DIRECTOR
 
    #!/bin/sh
    export DIRECTORYINDEX=index.html:index.xhtml
-   cot run -Ilib
+   cot run
 
 =head1 PLUGINS
 

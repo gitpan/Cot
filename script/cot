@@ -17,6 +17,7 @@ $command =~ /(init|run)/ or croak pod2usage();
 exit(0);
 
 sub run {
+    unshift @ARGV, '-Ilib';
     my $runner = Plack::Runner->new;
     $runner->parse_options(@ARGV);
     $runner->run;
@@ -27,7 +28,8 @@ sub init {
     croak "namespace already exists![", $namespace, "]" if ( -e $namespace );
 
     # validate namespace
-    # TODO:
+    croak "namespace is invalid!"
+      unless ( $namespace =~ /^[a-zA-Z][a-zA-Z0-9_]*$/ );
 
     my @template = YAML::Load( join '', <DATA> );
     for ( my $i = 0 ; $i < scalar @template ; $i += 2 ) {
@@ -141,8 +143,8 @@ cot - Cot framework utility.
 cot [init|run] ...
 
  Options:
-   init [namespace]                initialize application skelton. ex) % cot init Test
-   run  [plackup parameters]       run the application.            ex) % cot run -Ilib
+   init [namespace]            initialize application skelton. ex) % cot init Test
+   run  [plackup parameters]   run the application.            ex) % cot run --port 5001
 
 =head1 OPTIONS
 
@@ -164,7 +166,7 @@ you can initialize Cot application skelton and run it.
 
     % cot init Test
     % cd ./Test
-    % cot run -Ilib
+    % cot run
 
 =head1 LICENSE
 

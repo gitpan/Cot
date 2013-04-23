@@ -2,7 +2,6 @@
 .travis.yml
 Build.PL
 Changes
-Cot-0.01.tar.gz
 LICENSE
 META.json
 README.md

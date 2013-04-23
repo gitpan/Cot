@@ -32,7 +32,7 @@ You can initialize application skelton using cotto utility executable.
 
     % cot init Test
     % cd ./Test
-    % cot run -I./lib
+    % cot run
 
 # METHODS
 
@@ -80,7 +80,7 @@ Serve static files:
 ## run
 
 Up the Plack execution loop.
-You can set [placup](http://search.cpan.org/perldoc?placup) arguments.
+You can set [plackup](http://search.cpan.org/perldoc?plackup) arguments.
 
     use Cot;
 
@@ -167,7 +167,7 @@ Default value is __developement__. You can change COT\_ENV for configration.
 
     #!/bin/sh
     export COT_ENV=production
-    cot run -Ilib
+    cot run
 
 ## COT\_DIRECTORYINDEX
 
@@ -175,7 +175,7 @@ Default value is none. If you use __static__ method, automatically serve DIRECTO
 
     #!/bin/sh
     export DIRECTORYINDEX=index.html:index.xhtml
-    cot run -Ilib
+    cot run
 
 # PLUGINS
 
