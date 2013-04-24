@@ -1,3 +1,5 @@
+.gitignore
+.travis.yml
 Build.PL
 Changes
 LICENSE
@@ -13,5 +15,8 @@ script/cot
 t/00_compile.t
 t/01_cot.t
 t/03_executable.t
+Build.PL
+LICENSE
+META.json
 META.yml
 MANIFEST

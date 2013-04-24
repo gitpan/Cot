@@ -4,7 +4,7 @@
       "This module has been written by Yusuke Shibata <shibata@yusukeshibata.jp> and others,"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.0.54",
+   "generated_by" : "Minilla/v0.0.53",
    "license" : "perl_5",
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
@@ -18,8 +18,7 @@
          "inc",
          "share",
          "eg",
-         "examples",
-         "author"
+         "examples"
       ]
    },
    "prereqs" : {
@@ -32,10 +31,11 @@
       },
       "develop" : {
          "requires" : {
+            "Pod::Wordlist::hanekomu" : "0",
             "Test::CPAN::Meta" : "0",
             "Test::MinimumVersion" : "0.10108",
             "Test::Pod" : "1.41",
-            "Test::Spellunker" : "v0.0.16"
+            "Test::Spelling" : "0"
          }
       },
       "runtime" : {
@@ -57,19 +57,19 @@
    "provides" : {
       "Cot" : {
          "file" : "lib/Cot.pm",
-         "version" : "0.04"
+         "version" : "0.05"
       },
       "Cot::Config" : {
          "file" : "lib/Cot/Config.pm",
-         "version" : "0.04"
+         "version" : "0.05"
       },
       "Cot::Plugin" : {
          "file" : "lib/Cot/Plugin.pm",
-         "version" : "0.04"
+         "version" : "0.05"
       },
       "Cot::Plugin::Config" : {
          "file" : "lib/Cot/Plugin/Config.pm",
-         "version" : "0.04"
+         "version" : "0.05"
       }
    },
    "release_status" : "stable",
@@ -83,5 +83,5 @@
          "web" : "https://github.com/yusukeshibata/Cot"
       }
    },
-   "version" : "0.04"
+   "version" : "0.05"
 }
