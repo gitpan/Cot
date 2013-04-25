@@ -3,14 +3,14 @@ package Cot;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.05";
+our $VERSION = "0.06";
 $VERSION = eval $VERSION;
 use File::Spec;
 use Plack::Request;
 use Plack::Runner;
 use Plack::App::File;
 use Carp;
-use vars qw($AUTOLOAD %POOL @DIRECTORYINDEX);
+use vars qw($AUTOLOAD %POOL);
 
 sub import {
     my $class = shift;
@@ -120,7 +120,8 @@ sub _static {
     }
     elsif ( -d $path ) {
         if ( $path_info =~ /.*\/$/ ) {
-            foreach my $di (@DIRECTORYINDEX) {
+            my @di = split( /:/, $ENV{COT_DIRECTORYINDEX} || '' );
+            foreach my $di (@di) {
                 my $index = File::Spec->catfile( $path, $di );
                 if ( -f $index ) {
                     my $file =
@@ -153,21 +154,21 @@ sub app {
     my @path_info   = ();
     my $req         = Plack::Request->new($env);
     my $method      = lc( $req->method );
-    my $uri         = $req->uri->path;
-    my @uri         = File::Spec->splitdir($uri);
+    my $path        = $req->uri->path;
+    my @path        = File::Spec->splitdir($path);
     my $controllers = $self->{controller}->{$method} || {};
     my $controller;
 
     for ( ; ; ) {
-        my $u = File::Spec->catdir(@uri);
+        my $u = File::Spec->catdir(@path);
         $controller = $controllers->{$u} and last;
-        last unless scalar(@uri);
-        unshift @path_info, pop(@uri);
+        last unless scalar(@path);
+        unshift @path_info, pop(@path);
     }
     $self->{req}       = $req;
     $self->{env}       = $env;
     $self->{res}       = $req->new_response;
-    $self->{uri}       = $uri;
+    $self->{path}      = $path;
     $self->{path_info} = \@path_info;
     $controller ? &{ \&$controller }($self) : $self->forbidden_response;
     $self->res->finalize;
@@ -175,7 +176,7 @@ sub app {
 sub req       { shift->{req}; }
 sub res       { shift->{res}; }
 sub env       { shift->{env}; }
-sub uri       { shift->{uri}; }
+sub path      { shift->{path}; }
 sub path_info { shift->{path_info}; }
 
 sub forbidden_response {
@@ -208,12 +209,6 @@ sub AUTOLOAD {
         return $self->{$method};
     };
     $self->$method(@_);
-}
-
-sub BEGIN {
-    my $di = $ENV{COT_DIRECTORYINDEX};
-    return unless $di;
-    @DIRECTORYINDEX = split( /:/, $di );
 }
 
 sub DESTROY { }
@@ -365,6 +360,56 @@ You can set L<plackup> arguments.
 
     run("--port 5001 -R");
 
+=head2 forbidden_response
+
+    use Cot;
+
+    get '/secret' => sub {
+        $self->res->status(403);
+        $self->res->body('forbidden');
+    };
+
+same as below.
+
+    use Cot;
+
+    get '/secret' => sub {
+        $self->forbidden_response;
+    };
+
+=head2 notfound_response
+
+    use Cot;
+
+    get '/secret' => sub {
+        $self->res->status(404);
+        $self->res->body('notfound');
+    };
+
+same as below.
+
+    use Cot;
+
+    get '/secret' => sub {
+        $self->notfound_response;
+    };
+
+=head2 redirect_response
+
+    use Cot;
+
+    get '/secret' => sub {
+        $self->res->redirect('/', 301);
+    };
+
+same as below.
+
+    use Cot;
+
+    get '/secret' => sub {
+        $self->redirect_response;
+    };
+
 =head1 Context METHODS
 
 =head2 req
@@ -417,16 +462,16 @@ B<env> is Plack environment variable.
         ...
     };
 
-=head2 uri
+=head2 path
 
-B<uri> is requested URI string
+B<path> is requested PATH string
 
     use Cot;
 
     # if called /test/hello/myname
     get '/test' => sub {
         my $self = shift;
-        my $uri = $self->uri; # /test/hello/myname
+        my $path = $self->path; # /test/hello/myname
         ...
     };
 

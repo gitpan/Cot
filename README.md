@@ -130,6 +130,56 @@ You can set [plackup](http://search.cpan.org/perldoc?plackup) arguments.
 
     run("--port 5001 -R");
 
+## forbidden\_response
+
+    use Cot;
+
+    get '/secret' => sub {
+        $self->res->status(403);
+        $self->res->body('forbidden');
+    };
+
+same as below.
+
+    use Cot;
+
+    get '/secret' => sub {
+        $self->forbidden_response;
+    };
+
+## notfound\_response
+
+    use Cot;
+
+    get '/secret' => sub {
+        $self->res->status(404);
+        $self->res->body('notfound');
+    };
+
+same as below.
+
+    use Cot;
+
+    get '/secret' => sub {
+        $self->notfound_response;
+    };
+
+## redirect\_response
+
+    use Cot;
+
+    get '/secret' => sub {
+        $self->res->redirect('/', 301);
+    };
+
+same as below.
+
+    use Cot;
+
+    get '/secret' => sub {
+        $self->redirect_response;
+    };
+
 # Context METHODS
 
 ## req
@@ -182,16 +232,16 @@ __env__ is Plack environment variable.
         ...
     };
 
-## uri
+## path
 
-__uri__ is requested URI string
+__path__ is requested PATH string
 
     use Cot;
 
     # if called /test/hello/myname
     get '/test' => sub {
         my $self = shift;
-        my $uri = $self->uri; # /test/hello/myname
+        my $path = $self->path; # /test/hello/myname
         ...
     };
 

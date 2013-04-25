@@ -3,7 +3,7 @@ package Cot::Plugin::Config;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.05";
+our $VERSION = "0.06";
 $VERSION = eval $VERSION;
 use parent qw(Cot::Plugin);
 use Cot::Config;

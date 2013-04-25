@@ -1,5 +1,11 @@
 Revision history for Perl extension Cot
 
+0.06 2013-04-25T02:19:30Z
+
+   - "uri" method renamed "path"
+   - [redirect|notfound|forbidden]_response added.
+   - COT_DIRECTORYINDEX bug fixed.
+
 0.05 2013-04-24T00:54:40Z
 
    - test updated.
