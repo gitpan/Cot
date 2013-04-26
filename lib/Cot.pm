@@ -3,7 +3,7 @@ package Cot;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.07";
+our $VERSION = "0.08";
 $VERSION = eval $VERSION;
 use File::Spec;
 use Plack::Request;
@@ -275,6 +275,14 @@ You can initialize application skelton using cotto utility executable.
     % cot run
 
 =head1 METHODS
+
+=head2 plugin
+
+Added plugins to Cot App.
+
+    use Cot;
+
+    plugin qw/Config Session/;
 
 =head2 get
 

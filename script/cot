@@ -76,8 +76,8 @@ path: <?= $_[0] ?>/lib/<?= $_[0] ?>/App.pm
 package <?= $_[0] ?>::App;
 
 use Cot;
-use Cot::Plugin qw/Config/;
 
+plugin qw/Config/;
 static '/ui';
 
 get '/' => sub {

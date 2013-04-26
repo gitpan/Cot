@@ -36,6 +36,14 @@ You can initialize application skelton using cotto utility executable.
 
 # METHODS
 
+## plugin
+
+Added plugins to Cot App.
+
+    use Cot;
+
+    plugin qw/Config Session/;
+
 ## get
 
 Receive GET request:
