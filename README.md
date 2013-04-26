@@ -128,7 +128,7 @@ You can set [plackup](http://search.cpan.org/perldoc?plackup) arguments.
 
     use Cot;
 
-    run("--port 5001 -R");
+    run("-- port 5001 -R public");
 
 ## forbidden\_response
 
@@ -251,7 +251,7 @@ You can set ENVIRONMENT variables for change behaviour.
 
 ## COT\_ROOT
 
-Default value is "__.__". For example mod\_perl configuration, you can set
+Default value is " B <.>". For example mod\_perl configuration, you can set
 
     PerlSetEnv COT_ROOT /www/TestApp/
 
@@ -286,7 +286,7 @@ application code:
     use Cot::Plugin qw/Config/;
     # or use Cot::Plugin::Config;
 
-    get "/" => sub {
+    get '/' => sub {
        my $self = shift;
        my $hello = $c->config->{'hello'}; # world
        ...

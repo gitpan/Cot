@@ -3,7 +3,7 @@ package Cot;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.06";
+our $VERSION = "0.07";
 $VERSION = eval $VERSION;
 use File::Spec;
 use Plack::Request;
@@ -21,9 +21,9 @@ sub import {
         no strict 'refs';
         push @{"$pkg\::ISA"}, $class;
     }
-    for my $func (qw/run get post put patch delete options any static/) {
+    for my $func (qw/run get post put patch delete options any static plugin/) {
         no strict 'refs';
-        *{"$pkg\::$func"} = \&$func;
+        *{"$pkg\::$func"} = \&{"_export_$func"};
     }
 }
 
@@ -59,50 +59,60 @@ sub _method {
     }
 }
 
-sub get {
+sub _export_plugin {
+    my @plugins = @_;
+    my $class   = caller(0);
+    foreach (@_) {
+        my $klass = "Cot::Plugin::$_";
+        eval "require $klass" or croak "Plugin[$_] is not installed.";
+        $klass->_regist($class);
+    }
+}
+
+sub _export_get {
     my ( $path, $sub ) = @_;
     my $class = caller(0);
     $class->_method( $path, $sub, 'get' );
 }
 
-sub post {
+sub _export_post {
     my ( $path, $sub ) = @_;
     my $class = caller(0);
     $class->_method( $path, $sub, 'post' );
 }
 
-sub put {
+sub _export_put {
     my ( $path, $sub ) = @_;
     my $class = caller(0);
     $class->_method( $path, $sub, 'put' );
 }
 
-sub delete {
+sub _export_delete {
     my ( $path, $sub ) = @_;
     my $class = caller(0);
     $class->_method( $path, $sub, 'delete' );
 }
 
-sub patch {
+sub _export_patch {
     my ( $path, $sub ) = @_;
     my $class = caller(0);
     $class->_method( $path, $sub, 'patch' );
 }
 
-sub options {
+sub _export_options {
     my ( $path, $sub ) = @_;
     my $class = caller(0);
     $class->_method( $path, $sub, 'options' );
 }
 
-sub any {
+sub _export_any {
     my ( $path, $sub ) = @_;
     my $class = caller(0);
     $class->_method( $path, $sub, 'get', 'post', 'put', 'patch', 'options',
         'delete' );
 }
 
-sub static {
+sub _export_static {
     my ($path)     = @_;
     my $class      = caller(0);
     my $controller = $class->_app->{controller};
@@ -200,7 +210,7 @@ sub AUTOLOAD {
     my $self   = shift;
     my $caller = caller(0);
     ( my $method = $AUTOLOAD ) =~ s/.*:://;
-    croak("App can be extended only by Plugins[!$caller->$method]")
+    croak(" App can be extended only by Plugins [ !$caller->$method ] ")
       unless ( $caller->isa('Cot::Plugin') );
     no strict 'refs';
     *$method = sub {
@@ -213,12 +223,12 @@ sub AUTOLOAD {
 
 sub DESTROY { }
 
-sub run {
-    my $argv   = shift;
+sub _export_run {
+    my @argv   = @_;
     my $class  = caller(0);
     my $runner = Plack::Runner->new;
-    if ($argv) {
-        my @argv = split( /\s+/, $argv );
+    if ( scalar @argv ) {
+        @argv = split( /\s+/, $argv[0] ) if ( scalar @argv == 1 );
         $runner->parse_options(@argv);
     }
     my $app = sub { $class->app(shift); };
@@ -358,7 +368,7 @@ You can set L<plackup> arguments.
 
     use Cot;
 
-    run("--port 5001 -R");
+    run("-- port 5001 -R public");
 
 =head2 forbidden_response
 
@@ -481,7 +491,7 @@ You can set ENVIRONMENT variables for change behaviour.
 
 =head2 COT_ROOT
 
-Default value is "B<.>". For example mod_perl configuration, you can set
+Default value is " B <.>". For example mod_perl configuration, you can set
 
     PerlSetEnv COT_ROOT /www/TestApp/
 
@@ -516,7 +526,7 @@ application code:
     use Cot::Plugin qw/Config/;
     # or use Cot::Plugin::Config;
 
-    get "/" => sub {
+    get '/' => sub {
        my $self = shift;
        my $hello = $c->config->{'hello'}; # world
        ...
