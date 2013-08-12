@@ -3,7 +3,7 @@ package Cot;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.09";
+our $VERSION = "0.10";
 $VERSION = eval $VERSION;
 use File::Spec;
 use Plack::Request;
@@ -160,12 +160,13 @@ sub _static {
 
 sub app {
     my ( $class, $env ) = @_;
-    my $self        = $class->_app;
-    my @path_info   = ();
-    my $req         = Plack::Request->new($env);
-    my $method      = lc( $req->method );
-    my $path        = $req->uri->path;
-    my @path        = File::Spec->splitdir($path);
+    my $self      = $class->_app;
+    my @path_info = ();
+    my $req       = Plack::Request->new($env);
+    my $method    = lc( $req->method );
+    my $path      = $req->uri->path;
+    $path =~ s/$env->{SCRIPT_NAME}// if $env->{SCRIPT_NAME};
+    my @path = File::Spec->splitdir($path);
     my $controllers = $self->{controller}->{$method} || {};
     my $controller;
 

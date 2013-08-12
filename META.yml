@@ -27,16 +27,16 @@ no_index:
 provides:
   Cot:
     file: lib/Cot.pm
-    version: 0.09
+    version: 0.10
   Cot::Config:
     file: lib/Cot/Config.pm
-    version: 0.09
+    version: 0.10
   Cot::Plugin:
     file: lib/Cot/Plugin.pm
-    version: 0.09
+    version: 0.10
   Cot::Plugin::Config:
     file: lib/Cot/Plugin/Config.pm
-    version: 0.09
+    version: 0.10
 requires:
   Plack: 0
   Pod::Usage: 0
@@ -48,4 +48,4 @@ resources:
   bugtracker: https://github.com/yusukeshibata/Cot/issues
   homepage: https://github.com/yusukeshibata/Cot
   repository: git://github.com/yusukeshibata/Cot.git
-version: 0.09
+version: 0.10
