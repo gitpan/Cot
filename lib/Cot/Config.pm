@@ -3,7 +3,7 @@ package Cot::Config;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.10";
+our $VERSION = "0.11";
 $VERSION = eval $VERSION;
 use YAML ();
 use File::Spec;

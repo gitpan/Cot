@@ -1,5 +1,9 @@
 Revision history for Perl extension Cot
 
+0.11 2013-09-26T02:44:05Z
+
+   - indexes method
+
 0.10 2013-08-12T13:36:00Z
 
    - for cgi mode.

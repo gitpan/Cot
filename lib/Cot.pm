@@ -3,12 +3,13 @@ package Cot;
 use strict;
 use warnings;
 use 5.008005;
-our $VERSION = "0.10";
+our $VERSION = "0.11";
 $VERSION = eval $VERSION;
 use File::Spec;
 use Plack::Request;
 use Plack::Runner;
 use Plack::App::File;
+use DirHandle;
 use Carp;
 use vars qw($AUTOLOAD %POOL);
 
@@ -21,7 +22,7 @@ sub import {
         no strict 'refs';
         push @{"$pkg\::ISA"}, $class;
     }
-    for my $func (qw/run get post put patch delete options any static plugin/) {
+    for my $func (qw/run get post put patch delete options any static indexes plugin/) {
         no strict 'refs';
         *{"$pkg\::$func"} = \&{"_export_$func"};
     }
@@ -120,6 +121,44 @@ sub _export_static {
     $controller->{get}->{$path} = \&_static;
 }
 
+sub _export_indexes {
+    my ($path)     = @_;
+    my $class      = caller(0);
+    my $controller = $class->_app->{controller};
+    $controller->{get} ||= {};
+    $controller->{get}->{$path} = \&_indexes;
+}
+sub _indexes {
+    my $self      = shift;
+    my $path_info = $self->env->{PATH_INFO};
+    my $path =
+      File::Spec->catfile( $ENV{DOCUMENT_ROOT} || 'public', $path_info );
+    if ( !-e $path ) {
+        $self->notfound_response;
+    }
+    elsif ( -d $path ) {
+        if ( $path_info =~ /.*\/$/ ) {
+	  my $body = '<ul>';
+	  my $dh = DirHandle->new($path);
+	  while (defined($_ = $dh->read)) { $body .= sprintf('<li><a href="%s">%s</a></li>', $_,$_); }
+	  $body .= '</ul>';
+	  $self->res->status(200);
+	  $self->res->headers({'Content-Type' => 'text/html', charset => 'utf-8'});
+	  $self->res->body($body);
+	  return;
+        }
+        else {
+            $self->redirect_response( $path_info . '/' );
+        }
+    }
+    else {
+        my $file = Plack::App::File->new( file => $path )->call( $self->env );
+        $self->res->status( $file->[0] );
+        $self->res->headers( $file->[1] );
+        $self->res->body( $file->[2] );
+    }
+
+}
 sub _static {
     my $self      = shift;
     my $path_info = $self->env->{PATH_INFO};
